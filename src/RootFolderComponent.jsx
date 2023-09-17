@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+// import TreeComponent from './TreeComponent';
 
 function RootFolderComponent() {
-  const [rootFolderData , setRootFolderData] = useState([]);
+  const [rootFolderData , setRootFolderData] = useState(null);
+
 
   useEffect(() => {
     console.log(import.meta.env.VITE_REACT_APP_JWT)
@@ -16,35 +18,35 @@ function RootFolderComponent() {
     axios.get(apiUrl, {
       headers: {
         "Authorization": `Bearer ${jwtToken}`,
-        "Access-Control-Allow-Origin": "http://localhost:5173/",
-        // "Access-Control-Allow-Methods": [
-        //   "POST",
-        //   "GET",
-        //   "OPTIONS",
-        //   "DELETE",
-        //   "PUT",
-        // ],
-        // "Access-Control-Allow-Headers": [
-        //   "append",
-        //   "delete",
-        //   "entries",
-        //   "foreach",
-        //   "get",
-        //   "has",
-        //   "keys",
-        //   "set",
-        //   "values",
-        //   "Origin",
-        //   "Content-Type",
-        //   "X-Auth-Token"
-        // ],
+        "Access-Control-Allow-Origin": "http://localhost:5175/",
+        "Access-Control-Allow-Methods": [
+          "POST",
+          "GET",
+          "OPTIONS",
+          "DELETE",
+          "PUT",
+        ],
+        "Access-Control-Allow-Headers": [
+          "append",
+          "delete",
+          "entries",
+          "foreach",
+          "get",
+          "has",
+          "keys",
+          "set",
+          "values",
+          "Origin",
+          "Content-Type",
+          "X-Auth-Token"
+        ],
         
       },
     })
     .then((response) => {
       // API dönen veri kontrolü için console.log atılması
       const responseData = response.data
-      setRootFolderData(response.data);
+      setRootFolderData(responseData);
       console.log('API Verileri:', responseData);
     })
     .catch((error) => {
@@ -55,7 +57,14 @@ function RootFolderComponent() {
 
   return (
     <div>
-      {rootFolderData}
+      {/* <h1>TreeView</h1> */}
+      {rootFolderData && (
+        <ul>
+          {rootFolderData.childs.map((child) => (
+            <li key={child.id}>{child.name}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
