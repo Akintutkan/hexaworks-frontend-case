@@ -4,6 +4,7 @@ import "./rootfolder.css";
 import WordIcon from "./assets/icon-word.svg"
 import FolderIcon from "./assets/icon-folder.svg"
 import PdfIcon from "./assets/icon-pdf.svg"
+import ExcelIcon from "./assets/icon-excel.svg"
 
 
 
@@ -72,8 +73,8 @@ function RootFolderComponent() {
                   <img src={PdfIcon} alt="PDF Icon" />
                 ) : item.extension === 'docx' ? (
                   <img src={WordIcon} alt="Word Icon" />
-                ) :  item.extension === 'docx' (
-                 
+                ) :  item.extension === 'xlsx'  (
+                  <img src={ExcelIcon} alt="Excel Icon" />
                 )}
                 {item.name}
                 </summary>
