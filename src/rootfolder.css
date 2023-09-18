@@ -1,0 +1,70 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+ul{
+  list-style: none;
+  line-height:2rem;
+}
+ul summary{
+  cursor: pointer;
+  display:flex;
+}
+ul summary::marker{
+  display:none;
+}
+ul summary::-webkit-details-marker{
+  display:none
+}
+ul li{
+  position:relative;
+}
+ul li::before{
+  position:absolute;
+  left:-10px;
+  top:0px;
+  border-left: 2px solid gray;
+  border-bottom:2px solid gray;
+  content:"";
+  width:8px;
+  height:1rem;
+}
+ul li::after{
+  position:absolute;
+  left:-10px;
+  bottom:0px;
+  border-left: 2px solid gray;
+  content:"";
+  width: 8px;
+  height:100%;
+}
+ul li:last-child::after{
+  display:none
+}
+ul.tree > li:after,ul.tree >li:before{
+  display:none
+}
+ul summary::before{
+  position: absolute;
+  right:-3rem;
+  top:.55rem;
+  content:"i";
+  background: gray;
+  display:block;
+  width:15px;
+  height:15px;
+  border-radius:5rem;
+  z-index:999;
+  text-align:center;
+  line-height:.9rem;
+}
+ul details[open] > summary:before{
+  content:"🗘";
+}
+img{
+  padding-right: 5px;
+  height: 25px;
+}

@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-// import TreeComponent from './TreeComponent';
+import "./rootfolder.css";
+import WordIcon from "./assets/icon-word.svg"
+import FolderIcon from "./assets/icon-folder.svg"
+import PdfIcon from "./assets/icon-pdf.svg"
+
+
 
 function RootFolderComponent() {
-  const [rootFolderData , setRootFolderData] = useState(null);
-
-
+  const [rootFolderData , setRootFolderData] = useState({childs:[]});
   useEffect(() => {
     console.log(import.meta.env.VITE_REACT_APP_JWT)
     // .env dosyasının doğru bir şekilde içeri aktarılmasının kontrolü
@@ -55,17 +58,44 @@ function RootFolderComponent() {
     });
   }, []);
 
+  const renderTree = (data) => {
+    return (
+      <ul className="tree">
+        {data.childs.map((item) => (
+          <li key={item.id}>
+            <details>
+              <summary>
+                {/* Dosya türüne göre uygun SVG simgesini kullanmı */}
+                {item.isFolder ? (
+                  <img src={FolderIcon} alt="Folder Icon" />
+                ) : item.extension === 'pdf' ? (
+                  <img src={PdfIcon} alt="PDF Icon" />
+                ) : item.extension === 'docx' ? (
+                  <img src={WordIcon} alt="Word Icon" />
+                ) :  item.extension === 'docx' (
+                 
+                )}
+                {item.name}
+                </summary>
+              {item.isFolder && item.portfolios && item.portfolios.length > 0 && (
+                <ul>
+                  {item.portfolios.map((portfolio) => (
+                    <li key={portfolio.id}>{portfolio.name}</li>
+                  ))}
+                </ul>
+              )}
+              {item.childs && renderTree(item)} 
+            </details>
+          </li>
+        ))}
+      </ul>
+    );
+  };
   return (
     <div>
-      {/* <h1>TreeView</h1> */}
-      {rootFolderData && (
-        <ul>
-          {rootFolderData.childs.map((child) => (
-            <li key={child.id}>{child.name}</li>
-          ))}
-        </ul>
-      )}
-    </div>
+    {renderTree(rootFolderData)}
+  </div>
+
   );
 }
 
