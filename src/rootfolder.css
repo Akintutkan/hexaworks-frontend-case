@@ -26,8 +26,8 @@ ul li::before{
   position:absolute;
   left:-10px;
   top:0px;
-  border-left: 2px solid gray;
-  border-bottom:2px solid gray;
+  border-left: 2px dotted gray;
+  border-bottom:2px dotted gray;
   content:"";
   width:8px;
   height:1rem;
@@ -36,7 +36,7 @@ ul li::after{
   position:absolute;
   left:-10px;
   bottom:0px;
-  border-left: 2px solid gray;
+  border-left: 2px dotted gray;
   content:"";
   width: 8px;
   height:100%;
@@ -62,7 +62,7 @@ ul summary::before{
   line-height:.9rem;
 }
 ul details[open] > summary:before{
-  content:"🗘";
+  content:"X";
 }
 img{
   padding-right: 5px;
