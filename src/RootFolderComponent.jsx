@@ -13,6 +13,7 @@ function RootFolderComponent() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileType, setFileType] = useState(null);
   const [currentFolderPath, setCurrentFolderPath] = useState([]);
+  const localStorageKey = "folderData"
 
   useEffect(() => {
     console.log(import.meta.env.VITE_REACT_APP_JWT)
@@ -63,7 +64,13 @@ function RootFolderComponent() {
     });
   }, []);
 
-
+  useEffect(() => {
+    // localStorage'dan verileri alın
+    const savedData = JSON.parse(localStorage.getItem(localStorageKey));
+    if (savedData) {
+      setRootFolderData(savedData);
+    }
+  }, []);
   //Eklenmek istenen dosyayı eklemek için kullanılan fonksiyon
   const addFileToFolder = (folder) => {
     if (selectedFile && folder.extension === 'folder') {
@@ -73,19 +80,22 @@ function RootFolderComponent() {
         isFolder: false,
         extension: fileType,
       };
-
       folder.portfolios = [...(folder.portfolios || []), newFileItem];
+      
 
       setRootFolderData((prevData) => ({
         ...prevData,
         childs: prevData.childs.map((item) =>
           item.id === folder.id ? folder : item
-        ),
-      }));
-
+          ),
+        }));
+        
       // Seçilen dosyayı temizleyin
       setSelectedFile(null);
       setFileType(null);
+      setCurrentFolderPath([...currentFolderPath]);
+      saveDataToLocalStorage(rootFolderData);
+      
     }
   };
 
@@ -104,9 +114,10 @@ function RootFolderComponent() {
   // Dosya eklemek istenen klasörün yoluyla güncelleme
   const handleFileAddClick = (item) => {
     setCurrentFolderPath([...currentFolderPath, item]);
-
+    addFileToFolder(item)
     // Dosya seçme işlemini otomatik olarak başlatmak için fonksiyon
-    document.querySelector('input[type="file"]').click();
+    
+    document.querySelector('input[type="file"]').value=""
   };
 
  
@@ -119,7 +130,9 @@ function RootFolderComponent() {
               <summary>
               {item.isFolder && (
                   <button onClick={() => handleFileAddClick(item)}>+</button>
+                  
                 )}
+    
                 {/* Dosya türüne göre uygun SVG simgesini kullanmı */}
                 {item.isFolder ? (
                   <img src={FolderIcon} alt="Folder Icon" />
@@ -137,11 +150,21 @@ function RootFolderComponent() {
                   {item.portfolios.map((portfolio) => (
                     <li key={portfolio.id}>
                       {portfolio.extension === 'folder' ? (
-                        <button onClick={() => handleFileAddClick(portfolio)}>+</button>
+                        <button onClick={() => handleFileAddClick(portfolio)}></button>
                       ) : null}
                       {portfolio.name}
+                      
                     </li>
                   ))}
+                  {/* Yarın bu alanı düşün nasıl yapılabilir diye diğer klasöre nasıl eklebilir adına ve local storage problemin var onları hallet*/}
+                  <li>
+                      <input
+                  
+                  type="file"
+                  // style={{display: 'none'  }}
+                  onChange={handleFileInputChange}
+                />
+                </li>
                 </ul>
               )}
               {item.childs && renderTree(item)} 
@@ -153,12 +176,7 @@ function RootFolderComponent() {
   };
   return (
     <div>
-    {renderTree(rootFolderData)}
-    <input
-        type="file"
-        style={{ display: 'none' }}
-        onChange={handleFileInputChange}
-      />
+    {renderTree(rootFolderData)}  
 </div>
 
   );
