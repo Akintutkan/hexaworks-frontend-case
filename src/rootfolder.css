@@ -21,6 +21,7 @@ ul summary::-webkit-details-marker{
 }
 ul li{
   position:relative;
+  display: flex;
 }
 ul li::before{
   position:absolute;
@@ -31,6 +32,7 @@ ul li::before{
   content:"";
   width:8px;
   height:1rem;
+ 
 }
 ul li::after{
   position:absolute;
@@ -71,15 +73,8 @@ img{
 input{
   padding: 0;
 }
-button{
-  width: 20px;
-  height: 20px;
-  padding:0;
-}
 button img{
-  display: flex;
-  justify-content: center;
   margin:auto;
-  height: 15px;
-  padding-left: 1px;
+  height: 20px;
+ 
 }

@@ -7,6 +7,7 @@ import PdfIcon from "./assets/icon-pdf.svg"
 import ExcelIcon from "./assets/icon-excel.svg"
 import DefaultIcon from "./assets/icon-excel.svg"
 import CheckIcon from "./assets/icon-check.svg"
+// import { getItemFromLocalStorage, setItemInLocalStorage } from "../src/utils/localStorageUtils"
 
 
 
@@ -66,13 +67,25 @@ function RootFolderComponent() {
     });
   }, []);
 
+  
+  // const updateAndSaveToLocalStorage = (updatedData) => {
+  //   setRootFolderData(updatedData);
+  //   setItemInLocalStorage('rootFolderData', updatedData);
+  // };
+  // const handleUpdateButtonClick = () => {
+  //   const currentData = getItemFromLocalStorage('rootFolderData');
+  //   updateAndSaveToLocalStorage(currentData);
+  // };
+
+
 
   
   const addFileToFolder = (folder) => {
     if (selectedFile && folder.extension === 'folder') {
       const newFileItem = {
-        id: `f${Date.now()}`,
         name: selectedFile.name,
+        id: `f${Date.now()}`,
+        userCanAccess: true,
         isFolder: false,
         extension: fileType,
         icon: getFileIcon(fileType),
@@ -93,6 +106,7 @@ function RootFolderComponent() {
    
     }
   };
+  
   const getFileIcon = (extension) => {
     switch (extension) {
       case 'pdf':
@@ -113,10 +127,14 @@ function RootFolderComponent() {
   const handleFileInputChange = (e) => {
     const newFile = e.target.files[0];
     if (newFile) {
+      const fileNameWithoutExtension = newFile.name.replace(/\.[^/.]+$/, "");
+      setSelectedFile({
+        name: fileNameWithoutExtension, // Dosya adı uzantısız olarak ayarlandı
+        file: newFile, // Dosya kendisi saklanıyor
+      });
       const fileExtension = newFile.name.split(".").pop().toLowerCase();
-      setSelectedFile(newFile);
       setFileType(fileExtension);
-      addFileToFolder(currentFolderPath[currentFolderPath.length -1]); // Seçilen dosyayı eklemek istenen klasöre ekleyin
+      addFileToFolder(currentFolderPath[currentFolderPath.length - 1]);
     }
   };
 
@@ -128,16 +146,27 @@ function RootFolderComponent() {
     
     document.querySelector('input[type="file"]').value=""
   };
+
   
+  
+
   const renderTree = (data) => {
     return (
       <ul className="tree">
-        {data.childs.map((item) => (
+        {data.childs?.map((item) => (
           <li key={item.id}>
             <details>
               <summary>
                {getFileIcon(item.extension)}{item.name}
                 </summary>
+                {/* {item.isFolder && (
+  <>
+    
+    {item.objectType === "folder" && (
+      <button onClick={handleUpdateButtonClick}>Kaydet</button>
+    )}
+  </>
+)} */}
               {item.isFolder && item.portfolios && item.portfolios.length > 0 && (
                 <ul>
                   {item.portfolios.map((portfolio) => (
