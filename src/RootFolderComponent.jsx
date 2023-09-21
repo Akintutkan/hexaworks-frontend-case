@@ -67,7 +67,7 @@ function RootFolderComponent() {
     });
   }, []);
 
-  
+  //!! LocalStorage alanı
   // const updateAndSaveToLocalStorage = (updatedData) => {
   //   setRootFolderData(updatedData);
   //   setItemInLocalStorage('rootFolderData', updatedData);
@@ -77,9 +77,7 @@ function RootFolderComponent() {
   //   updateAndSaveToLocalStorage(currentData);
   // };
 
-
-
-  
+  //!! Seçilen Dosyayı apideki data ile birleştirme alanı
   const addFileToFolder = (folder) => {
     if (selectedFile && folder.extension === 'folder') {
       const newFileItem = {
@@ -107,6 +105,7 @@ function RootFolderComponent() {
     }
   };
   
+  //!! Yukarıda import ettiğimiz Svg dosyalarını burada dinamik hale getirdiğimiz bir döngü fonksiyonu oluşturdum
   const getFileIcon = (extension) => {
     switch (extension) {
       case 'pdf':
@@ -123,7 +122,7 @@ function RootFolderComponent() {
   };
 
       
-
+//!! desktoptan aldığımız dosyayı uzantısız şekilde dataya göndermek için kullandığımız fonksiyon
   const handleFileInputChange = (e) => {
     const newFile = e.target.files[0];
     if (newFile) {
@@ -138,7 +137,8 @@ function RootFolderComponent() {
     }
   };
 
-  // Dosya eklemek istenen klasörün yoluyla güncelleme
+
+  //!! Yukarıdaki ekleme fonksiyonunu yöneten fonksiyon
   const handleFileAddClick = (item) => {
     setCurrentFolderPath([...currentFolderPath, item]);
     addFileToFolder(item)
