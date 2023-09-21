@@ -68,3 +68,18 @@ img{
   padding-right: 5px;
   height: 25px;
 }
+input{
+  padding: 0;
+}
+button{
+  width: 20px;
+  height: 20px;
+  padding:0;
+}
+button img{
+  display: flex;
+  justify-content: center;
+  margin:auto;
+  height: 15px;
+  padding-left: 1px;
+}

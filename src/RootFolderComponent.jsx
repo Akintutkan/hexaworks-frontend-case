@@ -5,6 +5,8 @@ import WordIcon from "./assets/icon-word.svg"
 import FolderIcon from "./assets/icon-folder.svg"
 import PdfIcon from "./assets/icon-pdf.svg"
 import ExcelIcon from "./assets/icon-excel.svg"
+import DefaultIcon from "./assets/icon-excel.svg"
+import CheckIcon from "./assets/icon-check.svg"
 
 
 
@@ -13,7 +15,7 @@ function RootFolderComponent() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileType, setFileType] = useState(null);
   const [currentFolderPath, setCurrentFolderPath] = useState([]);
-  const localStorageKey = "folderData"
+
 
   useEffect(() => {
     console.log(import.meta.env.VITE_REACT_APP_JWT)
@@ -64,14 +66,8 @@ function RootFolderComponent() {
     });
   }, []);
 
-  useEffect(() => {
-    // localStorage'dan verileri alın
-    const savedData = JSON.parse(localStorage.getItem(localStorageKey));
-    if (savedData) {
-      setRootFolderData(savedData);
-    }
-  }, []);
-  //Eklenmek istenen dosyayı eklemek için kullanılan fonksiyon
+
+  
   const addFileToFolder = (folder) => {
     if (selectedFile && folder.extension === 'folder') {
       const newFileItem = {
@@ -79,10 +75,10 @@ function RootFolderComponent() {
         name: selectedFile.name,
         isFolder: false,
         extension: fileType,
+        icon: getFileIcon(fileType),
       };
       folder.portfolios = [...(folder.portfolios || []), newFileItem];
       
-
       setRootFolderData((prevData) => ({
         ...prevData,
         childs: prevData.childs.map((item) =>
@@ -94,8 +90,21 @@ function RootFolderComponent() {
       setSelectedFile(null);
       setFileType(null);
       setCurrentFolderPath([...currentFolderPath]);
-      // saveDataToLocalStorage(rootFolderData);
-      
+   
+    }
+  };
+  const getFileIcon = (extension) => {
+    switch (extension) {
+      case 'pdf':
+        return <img src={PdfIcon} alt="PDF Icon" />;
+      case 'docx':
+        return <img src={WordIcon} alt="Word Icon" />;
+      case 'xlsx':
+        return <img src={ExcelIcon} alt="Excel Icon" />;
+        case 'folder':
+        return <img src={FolderIcon} alt="Folder Icon" />;
+      default:
+        return <img src={DefaultIcon} alt="Default Icon" />;
     }
   };
 
@@ -127,41 +136,20 @@ function RootFolderComponent() {
           <li key={item.id}>
             <details>
               <summary>
-              {item.isFolder && (
-                  <button onClick={() => handleFileAddClick(item)}>+</button>
-                )}
-                {/* Dosya türüne göre uygun SVG simgesini kullanmı */}
-                {item.isFolder ? (<img src={FolderIcon} alt="Folder Icon" />) : item.extension === 'pdf' 
-                ? (<img src={PdfIcon} alt="PDF Icon" />) : item.extension === 'docx' 
-                ? (<img src={WordIcon} alt="Word Icon" />) :  item.extension === 'xlsx' (<img src={ExcelIcon} alt="Excel Icon" />)}
-                {item.name}
+               {getFileIcon(item.extension)}{item.name}
                 </summary>
               {item.isFolder && item.portfolios && item.portfolios.length > 0 && (
                 <ul>
                   {item.portfolios.map((portfolio) => (
-                    <li key={portfolio.id}>
-                      {portfolio.extension === 'folder' ? (
-                        <>
-                      <button onClick={() => handleFileAddClick(portfolio)}>+</button>
-                      {portfolio.extension === 'folder' ? (
-                            <input
-                              type="file"
-                              onChange={handleFileInputChange}
-                              style={{ display: 'block' }}
-                            />
-                      ):null}
-                      </>
-                      ):null}
-                      {portfolio.name} 
+                  <li key={portfolio.id}>
+                      <div>{getFileIcon(portfolio.extension)} {portfolio.name}</div>
                     </li>
                   ))}
-                  {/* Yarın bu alanı düşün nasıl yapılabilir diye diğer klasöre nasıl eklebilir adına ve local storage problemin var onları hallet*/}
                   <li>
-                      <input
-                  type="file"
-                  style={{display: "flex"  }}
-                  onChange={handleFileInputChange}
-                />
+                    <div>
+                      <input type="file"onChange={handleFileInputChange}/>
+                <button onClick={() => handleFileAddClick(item)}><img src={CheckIcon} alt=""/></button>
+                    </div>
                 </li>
                 </ul>
               )}
