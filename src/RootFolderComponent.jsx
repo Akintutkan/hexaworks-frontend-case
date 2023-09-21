@@ -94,7 +94,7 @@ function RootFolderComponent() {
       setSelectedFile(null);
       setFileType(null);
       setCurrentFolderPath([...currentFolderPath]);
-      saveDataToLocalStorage(rootFolderData);
+      // saveDataToLocalStorage(rootFolderData);
       
     }
   };
@@ -119,8 +119,7 @@ function RootFolderComponent() {
     
     document.querySelector('input[type="file"]').value=""
   };
-
- 
+  
   const renderTree = (data) => {
     return (
       <ul className="tree">
@@ -130,19 +129,11 @@ function RootFolderComponent() {
               <summary>
               {item.isFolder && (
                   <button onClick={() => handleFileAddClick(item)}>+</button>
-                  
                 )}
-    
                 {/* Dosya türüne göre uygun SVG simgesini kullanmı */}
-                {item.isFolder ? (
-                  <img src={FolderIcon} alt="Folder Icon" />
-                  ) : item.extension === 'pdf' ? (
-                    <img src={PdfIcon} alt="PDF Icon" />
-                    ) : item.extension === 'docx' ? (
-                      <img src={WordIcon} alt="Word Icon" />
-                      ) :  item.extension === 'xlsx'  (
-                        <img src={ExcelIcon} alt="Excel Icon" />
-                        )}
+                {item.isFolder ? (<img src={FolderIcon} alt="Folder Icon" />) : item.extension === 'pdf' 
+                ? (<img src={PdfIcon} alt="PDF Icon" />) : item.extension === 'docx' 
+                ? (<img src={WordIcon} alt="Word Icon" />) :  item.extension === 'xlsx' (<img src={ExcelIcon} alt="Excel Icon" />)}
                 {item.name}
                 </summary>
               {item.isFolder && item.portfolios && item.portfolios.length > 0 && (
@@ -150,18 +141,25 @@ function RootFolderComponent() {
                   {item.portfolios.map((portfolio) => (
                     <li key={portfolio.id}>
                       {portfolio.extension === 'folder' ? (
-                        <button onClick={() => handleFileAddClick(portfolio)}></button>
-                      ) : null}
-                      {portfolio.name}
-                      
+                        <>
+                      <button onClick={() => handleFileAddClick(portfolio)}>+</button>
+                      {portfolio.extension === 'folder' ? (
+                            <input
+                              type="file"
+                              onChange={handleFileInputChange}
+                              style={{ display: 'block' }}
+                            />
+                      ):null}
+                      </>
+                      ):null}
+                      {portfolio.name} 
                     </li>
                   ))}
                   {/* Yarın bu alanı düşün nasıl yapılabilir diye diğer klasöre nasıl eklebilir adına ve local storage problemin var onları hallet*/}
                   <li>
                       <input
-                  
                   type="file"
-                  // style={{display: 'none'  }}
+                  style={{display: "flex"  }}
                   onChange={handleFileInputChange}
                 />
                 </li>
